@@ -1,0 +1,38 @@
+﻿@page "/todolist"
+
+<PageTitle>Tasks to do</PageTitle>
+<h3>ToDoList</h3>
+
+<input placeholder="Type task title" @bind="toDoTitle"/>
+<input placeholder="Type task description" @bind="toDoDesc"/>
+<button @onclick="Add">Add</button>
+
+<ul>
+    @foreach (var toDo in toDos)
+    {
+        <li>@toDo.Title</li>
+    }
+</ul>
+
+
+@code {
+
+    List<ToDoItem> toDos = new List<ToDoItem>();
+    private string toDoTitle;
+    private string toDoDesc;
+
+    public void Add()
+    {
+        if (!string.IsNullOrEmpty(toDoTitle)&&!string.IsNullOrEmpty(toDoDesc))
+        {
+            var newToDo = new ToDoItem()
+                {
+                    Title = toDoTitle,
+                    Description = toDoDesc,
+                    Status = "Added",
+                    CreationDate = DateTime.Now
+                };
+            toDos.Add(newToDo);
+        }
+    }
+}
