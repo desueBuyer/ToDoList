@@ -3,36 +3,57 @@
 <PageTitle>Tasks to do</PageTitle>
 <h3>ToDoList</h3>
 
-<input placeholder="Type task title" @bind="toDoTitle"/>
-<input placeholder="Type task description" @bind="toDoDesc"/>
-<button @onclick="Add">Add</button>
 
-<ul>
-    @foreach (var toDo in toDos)
+<form method="post" @onsubmit="Add" @formname="starship-plain-form">
+    <AntiforgeryToken />
+    <div>
+        <label>
+            Title:
+            <InputText @bind-Value="item.Title"/>
+        </label>
+        <label>
+            Description:
+            <InputText @bind-Value="item.Description"/>
+        </label>
+    </div>
+    <div>
+        <button type="submit">Add Task</button>
+    </div>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scode="col">Creation Date</th>
+        </tr>
+    </thead>
+    @foreach (var todo in toDos)
     {
-        <li>@toDo.Title</li>
+            <tr>
+                <td scope="row">@todo.Title</td>
+                <td>@todo.Description</td>
+                <td>@todo.CreationDate</td>
+            </tr>
     }
-</ul>
+</table>
+
 
 
 @code {
 
     List<ToDoItem> toDos = new List<ToDoItem>();
-    private string toDoTitle;
-    private string toDoDesc;
+
+    private ToDoItem item = new ToDoItem();
 
     public void Add()
     {
-        if (!string.IsNullOrEmpty(toDoTitle)&&!string.IsNullOrEmpty(toDoDesc))
+        if (!string.IsNullOrEmpty(item.Title))
         {
-            var newToDo = new ToDoItem()
-                {
-                    Title = toDoTitle,
-                    Description = toDoDesc,
-                    Status = "Added",
-                    CreationDate = DateTime.Now
-                };
-            toDos.Add(newToDo);
+            item.CreationDate = DateTime.Now;
+            toDos.Add(item);
+            item = new ToDoItem();
         }
     }
 }
